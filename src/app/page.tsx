@@ -1,65 +1,92 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ScrollReveal } from "@/components/ui/scroll-reveal";
+import { MaterialIcon } from "@/components/ui/material-icon";
+import { AnimatedHero } from "@/components/ui/animated-hero";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="flex-grow pt-40 pb-24 px-6 md:px-12 max-w-7xl mx-auto w-full flex flex-col gap-24 relative">
+      {/* Subtle Grid Background */}
+      <div className="absolute inset-0 pointer-events-none grid grid-cols-12 gap-6 px-6 md:px-12 opacity-[0.03]">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div key={i} className="col-span-1 border-r border-[#111]" />
+        ))}
+      </div>
+
+      {/* Hero Section with Animated Canvas */}
+      <ScrollReveal>
+        <div className="relative z-10">
+          <AnimatedHero />
+        </div>
+      </ScrollReveal>
+
+      {/* Features Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+        <ScrollReveal delay={0}>
+          <Link href="/solutions" className="card card-glow flex flex-col p-8 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden">
+            <div className="icon-circle-bounce w-12 h-12 flex items-center justify-center rounded-full bg-surface-container border-[0.5px] border-[#11111114] mb-6">
+              <MaterialIcon name="widgets" className="text-primary" />
+            </div>
+            <h3 className="font-h3 text-primary mb-2">Web Solutions</h3>
+            <p className="font-body-md text-on-surface-variant mb-4">
+              High-speed, SEO-ready architectures paired with uncompromising aesthetic interfaces.
+            </p>
+            <span className="inline-flex items-center gap-2 font-label-sm text-primary uppercase tracking-wide mt-auto">
+              Explore
+              <MaterialIcon name="arrow_forward" size="text-sm" className="arrow-right" />
+            </span>
+          </Link>
+        </ScrollReveal>
+
+        <ScrollReveal delay={100}>
+          <Link href="/solutions" className="card card-glow flex flex-col p-8 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden">
+            <div className="icon-circle-bounce w-12 h-12 flex items-center justify-center rounded-full bg-surface-container border-[0.5px] border-[#11111114] mb-6">
+              <MaterialIcon name="smart_toy" className="text-primary" />
+            </div>
+            <h3 className="font-h3 text-primary mb-2">AI & Automation</h3>
+            <p className="font-body-md text-on-surface-variant mb-4">
+              Intelligent systems designed to capture leads 24/7 and drastically reduce human support volume.
+            </p>
+            <span className="inline-flex items-center gap-2 font-label-sm text-primary uppercase tracking-wide mt-auto">
+              Explore
+              <MaterialIcon name="arrow_forward" size="text-sm" className="arrow-right" />
+            </span>
+          </Link>
+        </ScrollReveal>
+
+        <ScrollReveal delay={200}>
+          <Link href="/industries" className="card card-glow flex flex-col p-8 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden">
+            <div className="icon-circle-bounce w-12 h-12 flex items-center justify-center rounded-full bg-surface-container border-[0.5px] border-[#11111114] mb-6">
+              <MaterialIcon name="domain" className="text-primary" />
+            </div>
+            <h3 className="font-h3 text-primary mb-2">Industry Solutions</h3>
+            <p className="font-body-md text-on-surface-variant mb-4">
+              Tailored automation for specialized industries including healthcare, real estate, and more.
+            </p>
+            <span className="inline-flex items-center gap-2 font-label-sm text-primary uppercase tracking-wide mt-auto">
+              Explore
+              <MaterialIcon name="arrow_forward" size="text-sm" className="arrow-right" />
+            </span>
+          </Link>
+        </ScrollReveal>
+      </div>
+
+      {/* CTA Section */}
+      <ScrollReveal>
+        <section className="relative z-10 bg-[#111111] rounded-lg border-[0.5px] border-white/10 p-12 text-center text-white">
+          <h2 className="font-h2 text-white mb-4">Ready to automate?</h2>
+          <p className="font-body-lg text-white/60 max-w-xl mx-auto mb-8">
+            Book a 45-minute technical review directly with our lead automation architects.
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/contact"
+            className="btn-primary inline-flex items-center gap-2 bg-white text-primary font-label-sm px-8 py-4 rounded-full hover:bg-white/90 transition-colors active:scale-95"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            Schedule Consultation
+            <MaterialIcon name="arrow_forward" size="text-sm" className="arrow-right" />
+          </Link>
+        </section>
+      </ScrollReveal>
+    </main>
   );
 }
