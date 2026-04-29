@@ -1,7 +1,8 @@
 {
-  "name": "eledralabs-web",
+  "name": "eledralabs-landing-page",
   "version": "0.1.0",
   "private": true,
+  "description": "Eledralabs - Architectural Automation Landing Page",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
