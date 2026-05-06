@@ -60,12 +60,6 @@ const industries = [
 export default function IndustriesPage() {
   return (
     <main className="flex-grow pt-40 pb-24 px-6 md:px-12 max-w-7xl mx-auto w-full flex flex-col gap-24 relative">
-      {/* Subtle Grid Background */}
-      <div className="absolute inset-0 pointer-events-none grid grid-cols-12 gap-6 px-6 md:px-12 opacity-[0.03]">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} className="col-span-1 border-r border-[#111]" />
-        ))}
-      </div>
 
       {/* Header Section */}
       <ScrollReveal>
