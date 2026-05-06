@@ -1,0 +1,445 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .hero-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #eeece8;
+    overflow: hidden;
+    font-family: var(--font-sans);
+    border-radius: var(--border-radius-lg);
+  }
+
+  .nav {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+  }
+
+  .nav-inner {
+    background: white;
+    border-radius: 40px;
+    padding: 0 6px 0 16px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    border: 0.5px solid rgba(0,0,0,0.1);
+    font-size: 12px;
+    color: #333;
+  }
+
+  .nav-logo {
+    font-weight: 600;
+    font-size: 13px;
+    color: #111;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .nav-logo-icon {
+    width: 18px; height: 18px;
+    background: #111;
+    border-radius: 50%;
+  }
+
+  .nav-links { display: flex; gap: 14px; color: #444; font-size: 12px; }
+
+  .nav-btn {
+    background: #111; color: white;
+    border-radius: 40px; padding: 0 14px;
+    height: 30px; display: flex; align-items: center;
+    font-size: 12px; font-weight: 500;
+  }
+
+  .nav-login { color: #444; font-size: 12px; padding: 0 6px; }
+
+  .nav-demo {
+    color: #111; font-size: 12px; padding: 0 10px;
+    height: 30px; display: flex; align-items: center;
+    border: 0.5px solid rgba(0,0,0,0.2);
+    border-radius: 40px; margin-right: 4px;
+  }
+
+  .grid-lines {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none; z-index: 1;
+  }
+
+  .grid-line {
+    position: absolute; top: 0; bottom: 0;
+    width: 1px; background: rgba(0,0,0,0.07);
+  }
+
+  .canvas-layer {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 2;
+  }
+
+  .center-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 15;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .big-title {
+    font-size: clamp(40px, 8vw, 80px);
+    font-weight: 700;
+    letter-spacing: -2px;
+    color: #111;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .sub-title {
+    font-size: clamp(8px, 1.1vw, 11px);
+    letter-spacing: 0.12em;
+    color: #666;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #111; color: white;
+    border-radius: 40px; padding: 9px 20px;
+    font-size: 12px; font-weight: 500;
+    cursor: pointer;
+  }
+
+  .badge-row {
+    position: absolute; bottom: 12px; left: 0; right: 0;
+    display: flex; justify-content: center; gap: 36px;
+    z-index: 20; pointer-events: none;
+  }
+
+  .badge {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 10px; color: #666;
+  }
+
+  .badge-icon {
+    width: 18px; height: 18px;
+    border: 0.5px solid #aaa; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; color: #555;
+  }
+
+  .node-tooltip {
+    position: absolute;
+    background: white;
+    border: 0.5px solid rgba(0,0,0,0.13);
+    border-radius: 8px;
+    padding: 5px 9px;
+    font-size: 10px; color: #222;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: 16;
+    line-height: 1.4;
+    text-align: center;
+    max-width: 120px;
+    white-space: normal;
+  }
+
+  .app-node {
+    position: absolute;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 3px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+    z-index: 16;
+  }
+
+  .app-icon {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    border: 0.5px solid rgba(0,0,0,0.1);
+    background: white;
+    overflow: hidden;
+  }
+
+  .app-label { font-size: 9px; color: #555; }
+</style>
+
+<div class="hero-wrap" id="hero">
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="nav-logo"><div class="nav-logo-icon"></div>Qatalog</div>
+      <div class="nav-links"><span>Product</span><span>Resources</span><span>Pricing</span></div>
+      <div class="nav-login">Login</div>
+      <div class="nav-demo">Book a demo</div>
+      <div class="nav-btn">Get started for free ›</div>
+    </div>
+  </div>
+
+  <div class="grid-lines" id="gridLines"></div>
+  <canvas class="canvas-layer" id="animCanvas"></canvas>
+
+  <div class="center-text">
+    <div class="big-title">Answers</div>
+    <div class="sub-title">From your apps, documents and databases</div>
+    <div class="cta-btn">Get started for free ›</div>
+  </div>
+
+  <div class="badge-row">
+    <div class="badge"><div class="badge-icon">②</div><div><div style="font-weight:500;color:#333">SOC 2</div><div>Type II</div></div></div>
+    <div class="badge"><div class="badge-icon">G</div><div><div style="font-weight:500;color:#333">GDPR</div><div>compliant</div></div></div>
+    <div class="badge"><div class="badge-icon">⊠</div><div><div style="font-weight:500;color:#333">ISO 27001</div><div>ISO 27701</div></div></div>
+    <div class="badge"><div class="badge-icon">✦</div><div><div style="font-weight:500;color:#333">E2E encryption</div><div>in transit and rest</div></div></div>
+  </div>
+
+  <div class="node-tooltip" id="t1"></div>
+  <div class="node-tooltip" id="t2"></div>
+  <div class="app-node" id="n1"><div class="app-icon" id="i1"></div><div class="app-label" id="l1"></div></div>
+  <div class="app-node" id="n2"><div class="app-icon" id="i2"></div><div class="app-label" id="l2"></div></div>
+</div>
+
+<script>
+const hero = document.getElementById('hero');
+
+function getSize() {
+  return { W: hero.offsetWidth, H: hero.offsetHeight };
+}
+
+const canvas = document.getElementById('animCanvas');
+const ctx = canvas.getContext('2d');
+
+const appData = [
+  { name: 'Salesforce', svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#0070D2"/><ellipse cx="16" cy="15" rx="8" ry="6" fill="white"/><ellipse cx="16" cy="15" rx="5" ry="3.5" fill="#0070D2"/></svg>` },
+  { name: 'ClickUp', svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#7B68EE"/><path d="M8 20l4-5 4 4 4-4 4 5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>` },
+  { name: 'Google Calendar', svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="6" fill="white"/><rect width="32" height="10" rx="2" fill="#4285F4"/><rect y="7" width="32" height="4" fill="#4285F4"/><text x="16" y="25" text-anchor="middle" font-size="9" font-weight="700" fill="#333" font-family="sans-serif">31</text></svg>` },
+  { name: 'Dropbox', svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#0061FF"/><path d="M16 9l-6 4 6 4 6-4-6-4zM10 17l6 4 6-4-6-4-6 4z" fill="white"/></svg>` },
+  { name: 'Notion', svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="6" fill="#111"/><text x="16" y="22" text-anchor="middle" font-size="16" font-weight="800" fill="white" font-family="serif">N</text></svg>` },
+  { name: 'Slack', svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#4A154B"/><circle cx="12" cy="12" r="2.5" fill="#E01E5A"/><circle cx="20" cy="12" r="2.5" fill="#36C5F0"/><circle cx="12" cy="20" r="2.5" fill="#2EB67D"/><circle cx="20" cy="20" r="2.5" fill="#ECB22E"/></svg>` },
+  { name: 'GitHub', svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#24292E"/><path d="M16 7a9 9 0 00-2.85 17.53c.45.08.6-.2.6-.43v-1.5c-2.5.54-3.03-1.2-3.03-1.2-.41-1.04-1-1.32-1-1.32-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.37 2.1.97 2.6.74.08-.58.31-.97.57-1.19-2-.23-4.1-1-4.1-4.43 0-.98.35-1.78.93-2.4-.09-.23-.4-1.14.09-2.37 0 0 .75-.24 2.48.93a8.6 8.6 0 014.5 0c1.72-1.17 2.47-.93 2.47-.93.5 1.23.19 2.14.09 2.37.58.62.93 1.42.93 2.4 0 3.44-2.1 4.2-4.1 4.42.32.28.61.82.61 1.66v2.46c0 .24.16.52.62.43A9 9 0 0016 7z" fill="white"/></svg>` },
+  { name: 'Jira', svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#0052CC"/><path d="M16 8l5 8-5 8-5-8z" fill="white" opacity="0.6"/><path d="M16 12l3 4-3 4-3-4z" fill="white"/></svg>` },
+];
+
+const tooltips = [
+  'Check sales pipeline status',
+  'Discover team reporting structures',
+  'Retrieve product specs quickly',
+  'Schedule team standup meeting',
+  'Find latest design documentation',
+  'Review open pull requests',
+  'Sync tasks with project board',
+  'Check deployment status',
+];
+
+// Zones: 'left', 'right', 'top', 'bottom'
+// Each workflow: two endpoints, each on a specific grid column & vertical fraction
+// We'll define them as fractions of W and H to be resolution-independent
+// Columns: 0=leftmost edge, 1..5 = grid lines at W*1/6, W*2/6, etc.
+// We place nodes: left side (col 0 or 1), right side (col 4 or 5), top (high y), bottom (low y)
+
+const workflowDefs = [
+  // Left side → Right side (curve passes behind center)
+  { p1: { cx: 1, cy: 0.60 }, p2: { cx: 4, cy: 0.55 }, app1: 0, app2: 1, tip1: tooltips[0], tip2: tooltips[1], color: '#b8aae8', tipSide1: 'right', tipSide2: 'left' },
+  // Top-left → Bottom-right
+  { p1: { cx: 1, cy: 0.25 }, p2: { cx: 4, cy: 0.78 }, app1: 2, app2: 3, tip1: tooltips[2], tip2: tooltips[3], color: '#8abce8', tipSide1: 'right', tipSide2: 'left' },
+  // Left (mid) → Right (top area)
+  { p1: { cx: 0, cy: 0.50 }, p2: { cx: 5, cy: 0.35 }, app1: 4, app2: 5, tip1: tooltips[4], tip2: tooltips[5], color: '#9ed4b4', tipSide1: 'right', tipSide2: 'left' },
+  // Top-right → Bottom-left
+  { p1: { cx: 4, cy: 0.22 }, p2: { cx: 1, cy: 0.75 }, app1: 6, app2: 7, tip1: tooltips[6], tip2: tooltips[7], color: '#e8c49a', tipSide1: 'left', tipSide2: 'right' },
+];
+
+let cWF = 0;
+let phase = 'draw';
+let progress = 0;
+let holdTimer = 0;
+
+const t1El = document.getElementById('t1');
+const t2El = document.getElementById('t2');
+const n1El = document.getElementById('n1');
+const n2El = document.getElementById('n2');
+
+function colToX(cx, W) {
+  // 6 columns (0..5 as indices into 5 grid lines, but we also use edge 0 and edge beyond)
+  // col 0 = x at W*0.5/6 (just inside left), col 5 = W*5.5/6 (just inside right)
+  // cols 1-4 are grid lines at W/6 * 1..4
+  const positions = [W * (1/12), W * (2/12), W * (4/12), W * (6/12), W * (8/12), W * (10/12)];
+  return positions[cx];
+}
+
+function setWF(idx) {
+  const wf = workflowDefs[idx];
+  const { W, H } = getSize();
+
+  document.getElementById('i1').innerHTML = appData[wf.app1].svg;
+  document.getElementById('l1').textContent = appData[wf.app1].name;
+  document.getElementById('i2').innerHTML = appData[wf.app2].svg;
+  document.getElementById('l2').textContent = appData[wf.app2].name;
+
+  t1El.textContent = wf.tip1;
+  t2El.textContent = wf.tip2;
+  t1El.style.opacity = '0';
+  t2El.style.opacity = '0';
+  n1El.style.opacity = '0';
+  n2El.style.opacity = '0';
+
+  const x1 = colToX(wf.p1.cx, W), y1 = H * wf.p1.cy;
+  const x2 = colToX(wf.p2.cx, W), y2 = H * wf.p2.cy;
+
+  // Position node 1 (below the dot)
+  n1El.style.left = (x1 - 17) + 'px';
+  n1El.style.top = (y1 + 6) + 'px';
+
+  // Position node 2
+  n2El.style.left = (x2 - 17) + 'px';
+  n2El.style.top = (y2 + 6) + 'px';
+
+  // Tooltip 1 position
+  const t1w = 120;
+  t1El.style.left = (wf.tipSide1 === 'right' ? x1 + 8 : x1 - t1w - 8) + 'px';
+  t1El.style.top = (y1 - 52) + 'px';
+
+  // Tooltip 2
+  const t2w = 120;
+  t2El.style.left = (wf.tipSide2 === 'right' ? x2 + 8 : x2 - t2w - 8) + 'px';
+  t2El.style.top = (y2 - 52) + 'px';
+}
+
+function bezierPt(x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2, t) {
+  const u = 1 - t;
+  return {
+    x: u*u*u*x1 + 3*u*u*t*cp1x + 3*u*t*t*cp2x + t*t*t*x2,
+    y: u*u*u*y1 + 3*u*u*t*cp1y + 3*u*t*t*cp2y + t*t*t*y2
+  };
+}
+
+function drawCurve(wf, t, alpha) {
+  const { W, H } = getSize();
+  const x1 = colToX(wf.p1.cx, W), y1 = H * wf.p1.cy;
+  const x2 = colToX(wf.p2.cx, W), y2 = H * wf.p2.cy;
+
+  // Control points: curve smoothly from p1, arcing toward center then out to p2
+  const cp1x = x1 + (x2 - x1) * 0.15;
+  const cp1y = y1 + (y2 - y1) * 0.7;
+  const cp2x = x2 - (x2 - x1) * 0.15;
+  const cp2y = y2 - (y2 - y1) * 0.7;
+
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.strokeStyle = wf.color;
+  ctx.lineWidth = 1.2;
+  ctx.setLineDash([]);
+
+  const steps = 80;
+  const drawSteps = Math.floor(t * steps);
+  ctx.beginPath();
+  for (let i = 0; i <= drawSteps; i++) {
+    const tt = i / steps;
+    const pt = bezierPt(x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2, tt);
+    if (i === 0) ctx.moveTo(pt.x, pt.y);
+    else ctx.lineTo(pt.x, pt.y);
+  }
+  ctx.stroke();
+
+  // Start dot
+  if (t > 0.02) {
+    ctx.beginPath();
+    ctx.arc(x1, y1, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = wf.color;
+    ctx.fill();
+  }
+  // End dot
+  if (t >= 1) {
+    ctx.beginPath();
+    ctx.arc(x2, y2, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = wf.color;
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+const DRAW_DUR = 1800;
+const HOLD_DUR = 2200;
+const FADE_DUR = 700;
+const PAUSE_DUR = 350;
+
+let tip1Shown = false, tip2Shown = false, nodesShown = false;
+let lastTime = 0;
+
+function tick(ts) {
+  const dt = lastTime ? Math.min(ts - lastTime, 50) : 16;
+  lastTime = ts;
+
+  const { W, H } = getSize();
+  if (canvas.width !== W || canvas.height !== H) {
+    canvas.width = W; canvas.height = H;
+    setWF(cWF);
+  }
+
+  ctx.clearRect(0, 0, W, H);
+  const wf = workflowDefs[cWF];
+
+  if (phase === 'draw') {
+    progress += dt / DRAW_DUR;
+    if (progress >= 1) { progress = 1; phase = 'hold'; holdTimer = 0; }
+
+    if (progress > 0.25 && !tip1Shown) {
+      t1El.style.opacity = '1';
+      n1El.style.opacity = '1';
+      tip1Shown = true;
+    }
+    if (progress >= 1 && !nodesShown) {
+      t2El.style.opacity = '1';
+      n2El.style.opacity = '1';
+      nodesShown = true;
+    }
+    drawCurve(wf, progress, 1);
+
+  } else if (phase === 'hold') {
+    holdTimer += dt;
+    drawCurve(wf, 1, 1);
+    if (holdTimer >= HOLD_DUR) { phase = 'fade'; holdTimer = 0; }
+
+  } else if (phase === 'fade') {
+    holdTimer += dt;
+    const a = Math.max(0, 1 - holdTimer / FADE_DUR);
+    drawCurve(wf, 1, a);
+    t1El.style.opacity = String(a);
+    t2El.style.opacity = String(a);
+    n1El.style.opacity = String(a);
+    n2El.style.opacity = String(a);
+    if (holdTimer >= FADE_DUR) { phase = 'pause'; holdTimer = 0; }
+
+  } else if (phase === 'pause') {
+    holdTimer += dt;
+    if (holdTimer >= PAUSE_DUR) {
+      cWF = (cWF + 1) % workflowDefs.length;
+      phase = 'draw'; progress = 0; holdTimer = 0;
+      tip1Shown = false; tip2Shown = false; nodesShown = false;
+      setWF(cWF);
+    }
+  }
+
+  requestAnimationFrame(tick);
+}
+
+// Build grid lines (11 lines dividing into 12 columns)
+for (let i = 1; i <= 11; i++) {
+  const el = document.createElement('div');
+  el.className = 'grid-line';
+  el.style.left = `${(i / 12) * 100}%`;
+  document.getElementById('gridLines').appendChild(el);
+}
+
+setWF(0);
+requestAnimationFrame(tick);
+</script>
