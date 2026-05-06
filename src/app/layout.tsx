@@ -11,7 +11,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Eledralabs - Architectural Automation",
-  description: "Precision-engineered Web and AI workflows that reduce operational drag, optimize aesthetics, and automate your most critical systems.",
+  description:
+    "Precision-engineered Web and AI workflows that reduce operational drag, optimize aesthetics, and automate your most critical systems.",
 };
 
 export default function RootLayout({
@@ -27,7 +28,16 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#EEECE8] text-on-background min-h-screen flex flex-col font-body-md selection:bg-primary-container selection:text-on-primary-container antialiased">
+      <body
+        suppressHydrationWarning
+        className="bg-[#EEECE8] text-on-background min-h-screen flex flex-col font-body-md selection:bg-primary-container selection:text-on-primary-container antialiased"
+      >
+        {/* Global 12-column grid background */}
+        <div className="fixed inset-0 pointer-events-none z-0 grid grid-cols-12 gap-6 px-6 md:px-12 max-w-7xl mx-auto w-full opacity-[0.03]">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div key={i} className="col-span-1 border-r border-[#111]" />
+          ))}
+        </div>
         <Navbar />
         {children}
         <Footer />
