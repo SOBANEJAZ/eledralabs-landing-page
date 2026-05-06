@@ -199,29 +199,33 @@ export default function IndustriesPage() {
                 />
               </div>
               <div>
-                <h2 className="font-h2 text-primary mb-4">Real Estate</h2>
-                <p className="font-body-lg text-on-surface-variant mb-6 max-w-2xl">
+                <h2 className="font-h2 text-primary mb-2">Real Estate</h2>
+                <p className="font-body-md text-on-surface-variant mb-6">
                   Streamline property inquiries and client acquisition.
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  {[
-                    { num: "01", text: "Lead qualification flows" },
-                    { num: "02", text: "Automated viewing scheduling" },
-                    { num: "03", text: "Property info chatbots" },
-                  ].map((step) => (
-                    <div
-                      key={step.num}
-                      className="step-card flex flex-col gap-2 p-4 rounded bg-surface-container-low border-[0.5px] border-[#11111108] cursor-pointer"
-                    >
-                      <span className="step-number font-label-sm text-label-sm text-primary transition-colors">
-                        {step.num}
-                      </span>
-                      <span className="font-body-md text-on-surface-variant">
-                        {step.text}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                <ul className="flex flex-col gap-3 font-body-md text-on-surface-variant">
+                  <li className="list-item-check flex items-start gap-3">
+                    <MaterialIcon
+                      name="check"
+                      className="text-secondary text-sm mt-1"
+                    />
+                    <span>Lead qualification flows</span>
+                  </li>
+                  <li className="list-item-check flex items-start gap-3">
+                    <MaterialIcon
+                      name="check"
+                      className="text-secondary text-sm mt-1"
+                    />
+                    <span>Automated viewing scheduling</span>
+                  </li>
+                  <li className="list-item-check flex items-start gap-3">
+                    <MaterialIcon
+                      name="check"
+                      className="text-secondary text-sm mt-1"
+                    />
+                    <span>Property info chatbots</span>
+                  </li>
+                </ul>
               </div>
               <Link
                 href="/contact"
