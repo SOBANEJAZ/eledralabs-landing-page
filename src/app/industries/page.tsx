@@ -82,11 +82,11 @@ export default function IndustriesPage() {
 
       {/* Solutions Bento Grid */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 relative z-10">
-        {/* Healthcare & Wellness */}
-        <ScrollReveal>
-          <div className="card card-glow md:col-span-8 flex flex-col justify-between p-8 md:p-12 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden relative">
+        {/* Healthcare & Wellness — Full Width */}
+        <ScrollReveal className="md:col-span-12">
+          <div className="card card-glow flex flex-col md:flex-row gap-8 p-8 md:p-12 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden relative">
             <div className="absolute top-0 right-0 w-64 h-64 bg-surface-container-high rounded-full blur-3xl -mr-32 -mt-32 opacity-50 group-hover:opacity-80 transition-opacity duration-500" />
-            <div className="flex flex-col gap-8 relative z-10">
+            <div className="flex-1 flex flex-col gap-8 relative z-10">
               <div className="icon-circle-bounce w-12 h-12 flex items-center justify-center rounded-full bg-surface-container border-[0.5px] border-[#11111114]">
                 <MaterialIcon
                   name="monitor_heart"
