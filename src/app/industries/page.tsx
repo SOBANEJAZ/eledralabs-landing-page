@@ -140,8 +140,8 @@ export default function IndustriesPage() {
         </ScrollReveal>
 
         {/* Home Services */}
-        <ScrollReveal delay={100}>
-          <div className="card card-glow md:col-span-4 flex flex-col justify-between p-8 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden relative">
+        <ScrollReveal className="md:col-span-6 h-full">
+          <div className="card card-glow flex flex-col justify-between p-8 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden relative h-full">
             <div className="flex flex-col gap-6 relative z-10 h-full">
               <div className="icon-circle-bounce w-12 h-12 flex items-center justify-center rounded-full bg-surface-container border-[0.5px] border-[#11111114]">
                 <MaterialIcon
@@ -189,9 +189,9 @@ export default function IndustriesPage() {
         </ScrollReveal>
 
         {/* Real Estate */}
-        <ScrollReveal>
-          <div className="card card-glow md:col-span-12 flex flex-col md:flex-row gap-8 p-8 md:p-12 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden relative items-center">
-            <div className="flex-1 flex flex-col gap-6 relative z-10">
+        <ScrollReveal delay={100} className="md:col-span-6 h-full">
+          <div className="card card-glow flex flex-col justify-between p-8 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden relative h-full">
+            <div className="flex flex-col gap-6 relative z-10">
               <div className="icon-circle-bounce w-12 h-12 flex items-center justify-center rounded-full bg-surface-container border-[0.5px] border-[#11111114]">
                 <MaterialIcon
                   name="real_estate_agent"
@@ -239,8 +239,8 @@ export default function IndustriesPage() {
         </ScrollReveal>
 
         {/* Legal Services */}
-        <ScrollReveal delay={100}>
-          <div className="card card-glow md:col-span-6 flex flex-col justify-between p-8 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden relative">
+        <ScrollReveal delay={100} className="md:col-span-6 h-full">
+          <div className="card card-glow flex flex-col justify-between p-8 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden relative h-full">
             <div className="flex flex-col gap-6 relative z-10">
               <div className="icon-circle-bounce w-12 h-12 flex items-center justify-center rounded-full bg-surface-container border-[0.5px] border-[#11111114]">
                 <MaterialIcon name="gavel" className="text-primary" />
@@ -283,8 +283,8 @@ export default function IndustriesPage() {
         </ScrollReveal>
 
         {/* E-commerce */}
-        <ScrollReveal delay={200}>
-          <div className="card card-glow md:col-span-6 flex flex-col justify-between p-8 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden relative">
+        <ScrollReveal delay={200} className="md:col-span-6 h-full">
+          <div className="card card-glow flex flex-col justify-between p-8 bg-surface-container-lowest rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden relative h-full">
             <div className="flex flex-col gap-6 relative z-10">
               <div className="icon-circle-bounce w-12 h-12 flex items-center justify-center rounded-full bg-surface-container border-[0.5px] border-[#11111114]">
                 <MaterialIcon
