@@ -151,7 +151,7 @@ export default function IndustriesPage() {
               </div>
               <div className="flex flex-col h-full justify-between">
                 <div>
-                  <h3 className="font-h3 text-primary mb-2">Home Services</h3>
+                  <h2 className="font-h2 text-primary mb-2">Home Services</h2>
                   <p className="font-body-md text-on-surface-variant mb-6">
                     HVAC, Plumbing & Electrical
                   </p>
@@ -246,7 +246,7 @@ export default function IndustriesPage() {
                 <MaterialIcon name="gavel" className="text-primary" />
               </div>
               <div>
-                <h3 className="font-h3 text-primary mb-2">Legal Services</h3>
+                <h2 className="font-h2 text-primary mb-2">Legal Services</h2>
                 <p className="font-body-md text-on-surface-variant mb-4">
                   Law Firms & Consultancies
                 </p>
@@ -293,7 +293,7 @@ export default function IndustriesPage() {
                 />
               </div>
               <div>
-                <h3 className="font-h3 text-primary mb-2">E-commerce</h3>
+                <h2 className="font-h2 text-primary mb-2">E-commerce</h2>
                 <p className="font-body-md text-on-surface-variant mb-4">
                   Online Retail & D2C Brands
                 </p>
