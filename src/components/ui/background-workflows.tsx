@@ -38,6 +38,8 @@ const workflowDefs: WorkflowDef[] = [
       { from: 0, to: 2, dir: "up" },
       { from: 0, to: 3, dir: "down" },
       { from: 0, to: 4, dir: "down" },
+      { from: 2, to: 3, dir: "down" },
+      { from: 4, to: 3, dir: "up" },
       { from: 1, to: 5, dir: "up" },
       { from: 3, to: 6, dir: "down" },
       { from: 5, to: 7, dir: "up" },
