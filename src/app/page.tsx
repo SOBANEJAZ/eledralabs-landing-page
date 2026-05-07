@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ScrollReveal } from "@/components/ui/scroll-reveal";
 import { MaterialIcon } from "@/components/ui/material-icon";
 import { AnimatedHero } from "@/components/ui/animated-hero";
+import { BackgroundWorkflows } from "@/components/ui/background-workflows";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
       {/* Hero Section with Animated Canvas */}
       <ScrollReveal>
         <div className="relative z-10">
+          <BackgroundWorkflows />
           <AnimatedHero />
         </div>
       </ScrollReveal>
@@ -17,7 +19,7 @@ export default function Home() {
       {/* Features Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
         <ScrollReveal delay={0}>
-          <Link href="/solutions" className="card card-glow flex flex-col p-8 rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden">
+          <Link href="/solutions" className="card card-glow flex flex-col p-8 rounded-lg border-[0.5px] border-[#11111114] bg-surface-container-lowest shadow-sm group overflow-hidden">
             <div className="icon-circle-bounce w-12 h-12 flex items-center justify-center rounded-full border-[0.5px] border-[#11111114] mb-6">
               <MaterialIcon name="widgets" className="text-primary" />
             </div>
@@ -33,7 +35,7 @@ export default function Home() {
         </ScrollReveal>
 
         <ScrollReveal delay={100}>
-          <Link href="/solutions" className="card card-glow flex flex-col p-8 rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden">
+          <Link href="/solutions" className="card card-glow flex flex-col p-8 rounded-lg border-[0.5px] border-[#11111114] bg-surface-container-lowest shadow-sm group overflow-hidden">
             <div className="icon-circle-bounce w-12 h-12 flex items-center justify-center rounded-full border-[0.5px] border-[#11111114] mb-6">
               <MaterialIcon name="smart_toy" className="text-primary" />
             </div>
@@ -49,7 +51,7 @@ export default function Home() {
         </ScrollReveal>
 
         <ScrollReveal delay={200}>
-          <Link href="/industries" className="card card-glow flex flex-col p-8 rounded-lg border-[0.5px] border-[#11111114] group overflow-hidden">
+          <Link href="/industries" className="card card-glow flex flex-col p-8 rounded-lg border-[0.5px] border-[#11111114] bg-surface-container-lowest shadow-sm group overflow-hidden">
             <div className="icon-circle-bounce w-12 h-12 flex items-center justify-center rounded-full border-[0.5px] border-[#11111114] mb-6">
               <MaterialIcon name="domain" className="text-primary" />
             </div>

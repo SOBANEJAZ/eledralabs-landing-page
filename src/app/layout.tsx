@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
-import { BackgroundWorkflows } from "@/components/ui/background-workflows";
+
 import { VerticalLines } from "@/components/ui/vertical-lines";
 
 const inter = Inter({
@@ -34,7 +34,6 @@ export default function RootLayout({
         suppressHydrationWarning
         className="relative bg-[#EEECE8] text-on-background min-h-screen font-body-md selection:bg-primary-container selection:text-on-primary-container antialiased"
       >
-        <BackgroundWorkflows />
         <VerticalLines
           className="fixed z-[1]"
           innerClassName="mx-auto h-full w-full max-w-7xl px-6 md:px-12"
