@@ -120,7 +120,7 @@ export function BackgroundWorkflows() {
     const labelTwo = container.querySelector<HTMLElement>("#bg-l2");
 
     function getSize() {
-      return { width: container.offsetWidth, height: container.offsetHeight };
+      return { width: container!.offsetWidth, height: container!.offsetHeight };
     }
 
     function setWorkflow(index: number) {
@@ -175,15 +175,15 @@ export function BackgroundWorkflows() {
       const cp2x = x2 - (x2 - x1) * 0.15;
       const cp2y = y2 - (y2 - y1) * 0.7;
 
-      ctx.save();
-      ctx.globalAlpha = alpha;
-      ctx.strokeStyle = workflow.color;
-      ctx.lineWidth = 1.2;
+      ctx!.save();
+      ctx!.globalAlpha = alpha;
+      ctx!.strokeStyle = workflow.color;
+      ctx!.lineWidth = 1.2;
 
       const steps = 80;
       const drawSteps = Math.floor(progress * steps);
 
-      ctx.beginPath();
+      ctx!.beginPath();
 
       for (let i = 0; i <= drawSteps; i += 1) {
         const stepProgress = i / steps;
@@ -199,27 +199,27 @@ export function BackgroundWorkflows() {
           stepProgress
         );
 
-        if (i === 0) ctx.moveTo(point.x, point.y);
-        else ctx.lineTo(point.x, point.y);
+        if (i === 0) ctx!.moveTo(point.x, point.y);
+        else ctx!.lineTo(point.x, point.y);
       }
 
-      ctx.stroke();
+      ctx!.stroke();
 
       if (progress > 0.02) {
-        ctx.beginPath();
-        ctx.arc(x1, y1, 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = workflow.color;
-        ctx.fill();
+        ctx!.beginPath();
+        ctx!.arc(x1, y1, 3.5, 0, Math.PI * 2);
+        ctx!.fillStyle = workflow.color;
+        ctx!.fill();
       }
 
       if (progress >= 1) {
-        ctx.beginPath();
-        ctx.arc(x2, y2, 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = workflow.color;
-        ctx.fill();
+        ctx!.beginPath();
+        ctx!.arc(x2, y2, 3.5, 0, Math.PI * 2);
+        ctx!.fillStyle = workflow.color;
+        ctx!.fill();
       }
 
-      ctx.restore();
+      ctx!.restore();
     }
 
     function tick(timestamp: number) {
@@ -229,13 +229,13 @@ export function BackgroundWorkflows() {
 
       state.lastTime = timestamp;
 
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
+      if (canvas!.width !== width || canvas!.height !== height) {
+        canvas!.width = width;
+        canvas!.height = height;
         setWorkflow(state.currentWorkflow);
       }
 
-      ctx.clearRect(0, 0, width, height);
+      ctx!.clearRect(0, 0, width, height);
 
       if (state.phase === "draw") {
         state.progress += elapsed / DRAW_DUR;
@@ -306,7 +306,7 @@ export function BackgroundWorkflows() {
   }, []);
 
   return (
-    <div aria-hidden="true" className="fixed inset-0 pointer-events-none z-0">
+    <div aria-hidden="true" className="absolute inset-0 pointer-events-none z-0">
       <div
         ref={containerRef}
         className="relative mx-auto h-full w-full max-w-7xl px-6 md:px-12"
