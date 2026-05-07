@@ -2,83 +2,160 @@
 
 import { useEffect, useRef } from "react";
 
-interface AppData {
-  name: string;
-  svg: string;
+interface FlowNode {
+  icon: string;
+  label: string;
+  tip: string;
+  cx: number;
+  cy: number;
+  tipSide: "left" | "right" | "top" | "bottom";
 }
 
 interface WorkflowDef {
-  p1: { cx: number; cy: number };
-  p2: { cx: number; cy: number };
-  app1: number;
-  app2: number;
-  tip1: string;
-  tip2: string;
+  name: string;
   color: string;
-  tipSide1: "left" | "right";
-  tipSide2: "left" | "right";
+  nodes: FlowNode[];
+  paths: { from: number; to: number; dir: "up" | "down" }[];
 }
 
-const appData: AppData[] = [
-  { name: "Salesforce", svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#0070D2"/><ellipse cx="16" cy="15" rx="8" ry="6" fill="white"/><ellipse cx="16" cy="15" rx="5" ry="3.5" fill="#0070D2"/></svg>` },
-  { name: "ClickUp", svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#7B68EE"/><path d="M8 20l4-5 4 4 4-4 4 5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>` },
-  { name: "Google Calendar", svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="6" fill="white"/><rect width="32" height="10" rx="2" fill="#4285F4"/><rect y="7" width="32" height="4" fill="#4285F4"/><text x="16" y="25" text-anchor="middle" font-size="9" font-weight="700" fill="#333" font-family="sans-serif">31</text></svg>` },
-  { name: "Dropbox", svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#0061FF"/><path d="M16 9l-6 4 6 4 6-4-6-4zM10 17l6 4 6-4-6-4-6 4z" fill="white"/></svg>` },
-  { name: "Notion", svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="6" fill="#111"/><text x="16" y="22" text-anchor="middle" font-size="16" font-weight="800" fill="white" font-family="serif">N</text></svg>` },
-  { name: "Slack", svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#4A154B"/><circle cx="12" cy="12" r="2.5" fill="#E01E5A"/><circle cx="20" cy="12" r="2.5" fill="#36C5F0"/><circle cx="12" cy="20" r="2.5" fill="#2EB67D"/><circle cx="20" cy="20" r="2.5" fill="#ECB22E"/></svg>` },
-  { name: "GitHub", svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#24292E"/><path d="M16 7a9 9 0 00-2.85 17.53c.45.08.6-.2.6-.43v-1.5c-2.5.54-3.03-1.2-3.03-1.2-.41-1.04-1-1.32-1-1.32-.82-.56.06-.55.06-.55.9.06 1.38.93 1.38.93.8 1.37 2.1.97 2.6.74.08-.58.31-.97.57-1.19-2-.23-4.1-1-4.1-4.43 0-.98.35-1.78.93-2.4-.09-.23-.4-1.14.09-2.37 0 0 .75-.24 2.48.93a8.6 8.6 0 014.5 0c1.72-1.17 2.47-.93 2.47-.93.5 1.23.19 2.14.09 2.37.58.62.93 1.42.93 2.4 0 3.44-2.1 4.2-4.1 4.42.32.28.61.82.61 1.66v2.46c0 .24.16.52.62.43A9 9 0 0016 7z" fill="white"/></svg>` },
-  { name: "Jira", svg: `<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#0052CC"/><path d="M16 8l5 8-5 8-5-8z" fill="white" opacity="0.6"/><path d="M16 12l3 4-3 4-3-4z" fill="white"/></svg>` },
-];
-
-const tooltips = [
-  "Check sales pipeline status",
-  "Discover team reporting structures",
-  "Retrieve product specs quickly",
-  "Schedule team standup meeting",
-  "Find latest design documentation",
-  "Review open pull requests",
-  "Sync tasks with project board",
-  "Check deployment status",
-];
-
 const workflowDefs: WorkflowDef[] = [
-  { p1: { cx: 1, cy: 0.6 }, p2: { cx: 4, cy: 0.55 }, app1: 0, app2: 1, tip1: tooltips[0], tip2: tooltips[1], color: "#b8aae8", tipSide1: "right", tipSide2: "left" },
-  { p1: { cx: 1, cy: 0.25 }, p2: { cx: 4, cy: 0.78 }, app1: 2, app2: 3, tip1: tooltips[2], tip2: tooltips[3], color: "#8abce8", tipSide1: "right", tipSide2: "left" },
-  { p1: { cx: 0, cy: 0.5 }, p2: { cx: 5, cy: 0.35 }, app1: 4, app2: 5, tip1: tooltips[4], tip2: tooltips[5], color: "#9ed4b4", tipSide1: "right", tipSide2: "left" },
-  { p1: { cx: 4, cy: 0.22 }, p2: { cx: 1, cy: 0.75 }, app1: 6, app2: 7, tip1: tooltips[6], tip2: tooltips[7], color: "#e8c49a", tipSide1: "left", tipSide2: "right" },
+  {
+    name: "Reception",
+    color: "#EF4444",
+    nodes: [
+      { icon: "phone", label: "Incoming Call", tip: "", cx: 0, cy: 0.42, tipSide: "bottom" },
+      { icon: "psychology", label: "AI Speech-to-Text", tip: "24/7 AI Voice Receptionist", cx: 2, cy: 0.22, tipSide: "top" },
+      { icon: "account_tree", label: "Branching Logic", tip: "Drafting personalized reply", cx: 4, cy: 0.20, tipSide: "top" },
+      { icon: "auto_fix_high", label: "Personalize", tip: "Drafting unique intro", cx: 1, cy: 0.78, tipSide: "bottom" },
+      { icon: "folder_open", label: "Knowledge Base", tip: "Handle booking or query", cx: 3, cy: 0.80, tipSide: "bottom" },
+      { icon: "hub", label: "Update CRM", tip: "", cx: 5, cy: 0.78, tipSide: "bottom" },
+      { icon: "forum", label: "Slack", tip: "", cx: 7.5, cy: 0.42, tipSide: "left" },
+    ],
+    paths: [
+      { from: 0, to: 1, dir: "up" },
+      { from: 0, to: 3, dir: "down" },
+      { from: 1, to: 2, dir: "up" },
+      { from: 3, to: 4, dir: "down" },
+      { from: 4, to: 5, dir: "down" },
+      { from: 2, to: 6, dir: "up" },
+      { from: 5, to: 6, dir: "up" },
+    ],
+  },
+  {
+    name: "Speed",
+    color: "#EF4444",
+    nodes: [
+      { icon: "description", label: "New Lead", tip: "", cx: 0, cy: 0.42, tipSide: "bottom" },
+      { icon: "psychology", label: "AI Enrichment", tip: "Lead Score: 95/100", cx: 2, cy: 0.24, tipSide: "top" },
+      { icon: "filter_alt", label: "Lead Scoring", tip: "Hot lead detected", cx: 4, cy: 0.22, tipSide: "top" },
+      { icon: "auto_fix_high", label: "Personalize", tip: "Drafting unique intro", cx: 1, cy: 0.80, tipSide: "bottom" },
+      { icon: "mail", label: "Custom Email", tip: "", cx: 3, cy: 0.82, tipSide: "bottom" },
+      { icon: "task_alt", label: "Lead Engaged", tip: "", cx: 5, cy: 0.80, tipSide: "bottom" },
+      { icon: "notification_important", label: "Alert SMS", tip: "", cx: 7.5, cy: 0.42, tipSide: "left" },
+    ],
+    paths: [
+      { from: 0, to: 1, dir: "up" },
+      { from: 0, to: 3, dir: "down" },
+      { from: 1, to: 2, dir: "up" },
+      { from: 3, to: 4, dir: "down" },
+      { from: 4, to: 5, dir: "down" },
+      { from: 2, to: 6, dir: "up" },
+      { from: 5, to: 6, dir: "up" },
+    ],
+  },
+  {
+    name: "Marketing",
+    color: "#EF4444",
+    nodes: [
+      { icon: "article", label: "New Blog Post", tip: "", cx: 0, cy: 0.42, tipSide: "bottom" },
+      { icon: "psychology", label: "AI Repurpose", tip: "Repurposing content...", cx: 2, cy: 0.20, tipSide: "top" },
+      { icon: "work", label: "LinkedIn Post", tip: "Professional tone set", cx: 4, cy: 0.22, tipSide: "top" },
+      { icon: "photo_camera", label: "Instagram", tip: "Visual created", cx: 1, cy: 0.78, tipSide: "bottom" },
+      { icon: "campaign", label: "Newsletter", tip: "", cx: 3, cy: 0.80, tipSide: "bottom" },
+      { icon: "analytics", label: "Traffic Surge", tip: "", cx: 5, cy: 0.78, tipSide: "bottom" },
+      { icon: "rocket_launch", label: "SEO Boost", tip: "", cx: 7.5, cy: 0.42, tipSide: "left" },
+    ],
+    paths: [
+      { from: 0, to: 1, dir: "up" },
+      { from: 0, to: 3, dir: "down" },
+      { from: 1, to: 2, dir: "up" },
+      { from: 3, to: 4, dir: "down" },
+      { from: 4, to: 5, dir: "down" },
+      { from: 2, to: 6, dir: "up" },
+      { from: 5, to: 6, dir: "up" },
+    ],
+  },
+  {
+    name: "Growth",
+    color: "#EF4444",
+    nodes: [
+      { icon: "location_on", label: "5-Star Review", tip: "", cx: 0, cy: 0.42, tipSide: "bottom" },
+      { icon: "psychology", label: "Sentiment Analysis", tip: "Positive sentiment", cx: 2, cy: 0.22, tipSide: "top" },
+      { icon: "trending_up", label: "SEO Ranking", tip: "", cx: 4, cy: 0.20, tipSide: "top" },
+      { icon: "edit", label: "AI Response", tip: "Drafting reply...", cx: 1, cy: 0.80, tipSide: "bottom" },
+      { icon: "code", label: "Testimonials", tip: "Website updated", cx: 3, cy: 0.82, tipSide: "bottom" },
+      { icon: "groups", label: "Facebook Share", tip: "", cx: 5, cy: 0.80, tipSide: "bottom" },
+      { icon: "emoji_events", label: "Rank #1", tip: "", cx: 7.5, cy: 0.42, tipSide: "left" },
+    ],
+    paths: [
+      { from: 0, to: 1, dir: "up" },
+      { from: 0, to: 3, dir: "down" },
+      { from: 1, to: 2, dir: "up" },
+      { from: 3, to: 4, dir: "down" },
+      { from: 4, to: 5, dir: "down" },
+      { from: 2, to: 6, dir: "up" },
+      { from: 5, to: 6, dir: "up" },
+    ],
+  },
+  {
+    name: "Sales",
+    color: "#EF4444",
+    nodes: [
+      { icon: "person_search", label: "Prospect Found", tip: "", cx: 0, cy: 0.42, tipSide: "bottom" },
+      { icon: "psychology", label: "AI Personalization", tip: "Analyzing profile...", cx: 2, cy: 0.20, tipSide: "top" },
+      { icon: "connect_without_contact", label: "LinkedIn InMail", tip: "InMail sent", cx: 4, cy: 0.22, tipSide: "top" },
+      { icon: "mark_email_unread", label: "Cold Outreach", tip: "Personalized email", cx: 1, cy: 0.78, tipSide: "bottom" },
+      { icon: "storage", label: "Sync to CRM", tip: "", cx: 3, cy: 0.80, tipSide: "bottom" },
+      { icon: "gps_fixed", label: "Meeting Booked", tip: "", cx: 5, cy: 0.78, tipSide: "bottom" },
+      { icon: "person_add", label: "Connection", tip: "", cx: 7.5, cy: 0.42, tipSide: "left" },
+    ],
+    paths: [
+      { from: 0, to: 1, dir: "up" },
+      { from: 0, to: 3, dir: "down" },
+      { from: 1, to: 2, dir: "up" },
+      { from: 3, to: 4, dir: "down" },
+      { from: 4, to: 5, dir: "down" },
+      { from: 2, to: 6, dir: "up" },
+      { from: 5, to: 6, dir: "up" },
+    ],
+  },
 ];
 
 const DRAW_DUR = 1800;
 const HOLD_DUR = 2200;
 const FADE_DUR = 700;
-const PAUSE_DUR = 350;
+const PAUSE_DUR = 400;
+const NODE_POOL_SIZE = 7;
+
+const COL_POSITIONS = [0.07, 0.20, 0.34, 0.48, 0.60, 0.72, 0.84, 0.94];
 
 function colToX(cx: number, width: number): number {
-  const positions = [
-    width * (1 / 12),
-    width * (2 / 12),
-    width * (4 / 12),
-    width * (6 / 12),
-    width * (8 / 12),
-    width * (10 / 12),
-  ];
-
-  return positions[cx];
+  const idx = Math.min(Math.max(Math.round(cx), 0), COL_POSITIONS.length - 1);
+  return width * COL_POSITIONS[idx];
 }
 
-function bezierPt(
-  x1: number,
-  y1: number,
-  cp1x: number,
-  cp1y: number,
-  cp2x: number,
-  cp2y: number,
-  x2: number,
-  y2: number,
+function fracToY(cy: number, height: number): number {
+  return height * cy;
+}
+
+function bezierPoint(
+  x1: number, y1: number,
+  cp1x: number, cp1y: number,
+  cp2x: number, cp2y: number,
+  x2: number, y2: number,
   t: number
 ) {
   const u = 1 - t;
-
   return {
     x: u * u * u * x1 + 3 * u * u * t * cp1x + 3 * u * t * t * cp2x + t * t * t * x2,
     y: u * u * u * y1 + 3 * u * u * t * cp1y + 3 * u * t * t * cp2y + t * t * t * y2,
@@ -88,151 +165,232 @@ function bezierPt(
 export function BackgroundWorkflows() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const stateRef = useRef({
-    currentWorkflow: 0,
-    phase: "draw" as "draw" | "hold" | "fade" | "pause",
-    progress: 0,
-    holdTimer: 0,
-    firstPointShown: false,
-    secondPointShown: false,
-    lastTime: 0,
-    animationId: 0,
-  });
 
   useEffect(() => {
     const container = containerRef.current;
     const canvas = canvasRef.current;
-    const state = stateRef.current;
-
     if (!container || !canvas) return;
 
     const ctx = canvas.getContext("2d");
-
     if (!ctx) return;
 
-    const tooltipOne = container.querySelector<HTMLElement>("#bg-t1");
-    const tooltipTwo = container.querySelector<HTMLElement>("#bg-t2");
-    const nodeOne = container.querySelector<HTMLElement>("#bg-n1");
-    const nodeTwo = container.querySelector<HTMLElement>("#bg-n2");
-    const iconOne = container.querySelector<HTMLElement>("#bg-i1");
-    const labelOne = container.querySelector<HTMLElement>("#bg-l1");
-    const iconTwo = container.querySelector<HTMLElement>("#bg-i2");
-    const labelTwo = container.querySelector<HTMLElement>("#bg-l2");
+    const state = {
+      wfIdx: 0,
+      progress: 0,
+      lastTime: 0,
+      animId: 0,
+      phase: "draw" as "draw" | "hold" | "fade" | "pause",
+      holdTimer: 0,
+      nodesVisible: false,
+    };
+
+    const nodeEls: HTMLElement[] = [];
+    const tipEls: HTMLElement[] = [];
+
+    for (let i = 0; i < NODE_POOL_SIZE; i++) {
+      const nodeEl = document.getElementById(`bw-n${i}`) as HTMLElement | null;
+      const tipEl = document.getElementById(`bw-t${i}`) as HTMLElement | null;
+      if (nodeEl) nodeEls.push(nodeEl);
+      if (tipEl) tipEls.push(tipEl);
+    }
 
     function getSize() {
       return { width: container!.offsetWidth, height: container!.offsetHeight };
     }
 
     function setWorkflow(index: number) {
-      const workflow = workflowDefs[index];
+      const wf = workflowDefs[index];
       const { width, height } = getSize();
-      const x1 = colToX(workflow.p1.cx, width);
-      const y1 = height * workflow.p1.cy;
-      const x2 = colToX(workflow.p2.cx, width);
-      const y2 = height * workflow.p2.cy;
 
-      if (iconOne) iconOne.innerHTML = appData[workflow.app1].svg;
-      if (labelOne) labelOne.textContent = appData[workflow.app1].name;
-      if (iconTwo) iconTwo.innerHTML = appData[workflow.app2].svg;
-      if (labelTwo) labelTwo.textContent = appData[workflow.app2].name;
+      for (let i = 0; i < NODE_POOL_SIZE; i++) {
+        const nodeEl = nodeEls[i];
+        const tipEl = tipEls[i];
+        if (!nodeEl || !tipEl) continue;
 
-      if (tooltipOne) {
-        tooltipOne.textContent = workflow.tip1;
-        tooltipOne.style.opacity = "0";
-        tooltipOne.style.left = `${workflow.tipSide1 === "right" ? x1 + 8 : x1 - 128}px`;
-        tooltipOne.style.top = `${y1 - 52}px`;
+        if (i < wf.nodes.length) {
+          const node = wf.nodes[i];
+          const x = colToX(node.cx, width);
+          const y = fracToY(node.cy, height);
+
+          nodeEl.style.display = "";
+          nodeEl.style.opacity = "0";
+          nodeEl.style.left = `${x - 22}px`;
+          nodeEl.style.top = `${y - 22}px`;
+
+          const iconInner = nodeEl.querySelector(".bw-icon-inner") as HTMLElement | null;
+          if (iconInner) {
+            iconInner.textContent = node.icon;
+            iconInner.style.color = wf.color;
+          }
+          const labelEl = nodeEl.querySelector(".bw-label") as HTMLElement | null;
+          if (labelEl) labelEl.textContent = node.label;
+
+          // Tooltip
+          tipEl.textContent = node.tip;
+          tipEl.style.display = node.tip ? "" : "none";
+          tipEl.style.opacity = "0";
+          tipEl.style.borderColor = `${wf.color}40`;
+
+          const tipW = 150;
+          const tipH = 36;
+          if (node.tipSide === "top") {
+            tipEl.style.left = `${x - tipW / 2}px`;
+            tipEl.style.top = `${y - 56}px`;
+          } else if (node.tipSide === "bottom") {
+            tipEl.style.left = `${x - tipW / 2}px`;
+            tipEl.style.top = `${y + 48}px`;
+          } else if (node.tipSide === "left") {
+            tipEl.style.left = `${x - tipW - 28}px`;
+            tipEl.style.top = `${y - tipH / 2}px`;
+          } else {
+            tipEl.style.left = `${x + 28}px`;
+            tipEl.style.top = `${y - tipH / 2}px`;
+          }
+          tipEl.style.width = `${tipW}px`;
+        } else {
+          nodeEl.style.display = "none";
+          tipEl.style.display = "none";
+        }
       }
 
-      if (tooltipTwo) {
-        tooltipTwo.textContent = workflow.tip2;
-        tooltipTwo.style.opacity = "0";
-        tooltipTwo.style.left = `${workflow.tipSide2 === "right" ? x2 + 8 : x2 - 128}px`;
-        tooltipTwo.style.top = `${y2 - 52}px`;
-      }
-
-      if (nodeOne) {
-        nodeOne.style.opacity = "0";
-        nodeOne.style.left = `${x1 - 17}px`;
-        nodeOne.style.top = `${y1 + 6}px`;
-      }
-
-      if (nodeTwo) {
-        nodeTwo.style.opacity = "0";
-        nodeTwo.style.left = `${x2 - 17}px`;
-        nodeTwo.style.top = `${y2 + 6}px`;
-      }
+      state.wfIdx = index;
+      state.progress = 0;
+      state.phase = "draw";
+      state.holdTimer = 0;
+      state.nodesVisible = false;
     }
 
-    function drawCurve(workflow: WorkflowDef, progress: number, alpha: number) {
-      const { width, height } = getSize();
-      const x1 = colToX(workflow.p1.cx, width);
-      const y1 = height * workflow.p1.cy;
-      const x2 = colToX(workflow.p2.cx, width);
-      const y2 = height * workflow.p2.cy;
+    function drawFlowCurve(
+      fromNode: FlowNode,
+      toNode: FlowNode,
+      width: number,
+      height: number,
+      color: string,
+      alpha: number,
+      progress: number,
+    ) {
+      if (!ctx) return;
+      const c = ctx;
 
-      const cp1x = x1 + (x2 - x1) * 0.15;
-      const cp1y = y1 + (y2 - y1) * 0.7;
-      const cp2x = x2 - (x2 - x1) * 0.15;
-      const cp2y = y2 - (y2 - y1) * 0.7;
+      const x1 = colToX(fromNode.cx, width);
+      const y1 = fracToY(fromNode.cy, height);
+      const x2 = colToX(toNode.cx, width);
+      const y2 = fracToY(toNode.cy, height);
 
-      ctx!.save();
-      ctx!.globalAlpha = alpha;
-      ctx!.strokeStyle = workflow.color;
-      ctx!.lineWidth = 1.2;
+      const dx = x2 - x1;
 
-      const steps = 80;
-      const drawSteps = Math.floor(progress * steps);
+      // Dead zone: heading area (35%-65% height)
+      const deadZoneTop = height * 0.35;
+      const deadZoneBottom = height * 0.65;
 
-      ctx!.beginPath();
+      // Determine curve direction to avoid dead zone
+      const fromAbove = y1 < deadZoneTop;
+      const fromBelow = y1 > deadZoneBottom;
+      const toAbove = y2 < deadZoneTop;
+      const toBelow = y2 > deadZoneBottom;
+      const fromMid = !fromAbove && !fromBelow;
 
-      for (let i = 0; i <= drawSteps; i += 1) {
-        const stepProgress = i / steps;
-        const point = bezierPt(
-          x1,
-          y1,
-          cp1x,
-          cp1y,
-          cp2x,
-          cp2y,
-          x2,
-          y2,
-          stepProgress
-        );
+      let cp1x: number, cp1y: number, cp2x: number, cp2y: number;
+      const curveStrength = Math.abs(dx) * 0.15 + 20;
 
-        if (i === 0) ctx!.moveTo(point.x, point.y);
-        else ctx!.lineTo(point.x, point.y);
+      if (fromAbove || (fromMid && toAbove)) {
+        // Route ABOVE - gentle curve above dead zone
+        cp1x = x1 + dx * 0.4;
+        cp1y = Math.min(y1, deadZoneTop) - curveStrength * 0.5;
+        cp2x = x2 - dx * 0.4;
+        cp2y = Math.min(y2, deadZoneTop) - curveStrength * 0.5;
+      } else if (fromBelow || (fromMid && toBelow)) {
+        // Route BELOW - gentle curve below dead zone
+        cp1x = x1 + dx * 0.4;
+        cp1y = Math.max(y1, deadZoneBottom) + curveStrength * 0.5;
+        cp2x = x2 - dx * 0.4;
+        cp2y = Math.max(y2, deadZoneBottom) + curveStrength * 0.5;
+      } else if (toAbove) {
+        // Route around ABOVE
+        cp1x = x1 + dx * 0.4;
+        cp1y = y1 - curveStrength * 0.6;
+        cp2x = x2 - dx * 0.4;
+        cp2y = y2 - curveStrength * 0.6;
+      } else if (toBelow) {
+        // Route around BELOW
+        cp1x = x1 + dx * 0.4;
+        cp1y = y1 + curveStrength * 0.6;
+        cp2x = x2 - dx * 0.4;
+        cp2y = y2 + curveStrength * 0.6;
+      } else {
+        // Default slight curve
+        const dir = y1 < height * 0.5 ? -1 : 1;
+        cp1x = x1 + dx * 0.4;
+        cp1y = y1 + curveStrength * dir * 0.3;
+        cp2x = x2 - dx * 0.4;
+        cp2y = y2 + curveStrength * dir * 0.3;
       }
 
-      ctx!.stroke();
+      c.save();
+      c.globalAlpha = alpha;
+      c.strokeStyle = color;
+      c.lineWidth = 2;
+      c.lineCap = "round";
+      c.lineJoin = "round";
 
-      if (progress > 0.02) {
-        ctx!.beginPath();
-        ctx!.arc(x1, y1, 3.5, 0, Math.PI * 2);
-        ctx!.fillStyle = workflow.color;
-        ctx!.fill();
+      const steps = 60;
+      const drawSteps = Math.max(0, Math.floor(progress * steps));
+
+      c.beginPath();
+      for (let i = 0; i <= drawSteps; i++) {
+        const t = i / steps;
+        const point = bezierPoint(x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2, t);
+        if (i === 0) c.moveTo(point.x, point.y);
+        else c.lineTo(point.x, point.y);
+      }
+      c.stroke();
+
+      // Draw animated dot at the tip of the line
+      if (progress > 0 && progress < 1) {
+        const tipPoint = bezierPoint(x1, y1, cp1x, cp1y, cp2x, cp2y, x2, y2, Math.min(progress, 1));
+        c.beginPath();
+        c.arc(tipPoint.x, tipPoint.y, 4, 0, Math.PI * 2);
+        c.fillStyle = color;
+        c.globalAlpha = alpha;
+        c.fill();
+
+        // Glow effect
+        c.beginPath();
+        c.arc(tipPoint.x, tipPoint.y, 8, 0, Math.PI * 2);
+        c.fillStyle = color;
+        c.globalAlpha = alpha * 0.3;
+        c.fill();
       }
 
-      if (progress >= 1) {
-        ctx!.beginPath();
-        ctx!.arc(x2, y2, 3.5, 0, Math.PI * 2);
-        ctx!.fillStyle = workflow.color;
-        ctx!.fill();
-      }
+      c.restore();
+    }
 
-      ctx!.restore();
+    function drawNodeDot(x: number, y: number, color: string, alpha: number) {
+      if (!ctx) return;
+      const c = ctx;
+      c.save();
+      c.globalAlpha = alpha;
+      c.beginPath();
+      c.arc(x, y, 6, 0, Math.PI * 2);
+      c.fillStyle = color;
+      c.fill();
+      c.strokeStyle = "white";
+      c.lineWidth = 2;
+      c.stroke();
+      c.restore();
     }
 
     function tick(timestamp: number) {
-      const { width, height } = getSize();
       const elapsed = state.lastTime ? Math.min(timestamp - state.lastTime, 50) : 16;
-      const workflow = workflowDefs[state.currentWorkflow];
-
       state.lastTime = timestamp;
+
+      const wf = workflowDefs[state.wfIdx];
+      const { width, height } = getSize();
 
       if (canvas!.width !== width || canvas!.height !== height) {
         canvas!.width = width;
         canvas!.height = height;
-        setWorkflow(state.currentWorkflow);
+        setWorkflow(state.wfIdx);
       }
 
       ctx!.clearRect(0, 0, width, height);
@@ -244,65 +402,112 @@ export function BackgroundWorkflows() {
           state.progress = 1;
           state.phase = "hold";
           state.holdTimer = 0;
+
+          // Show all nodes
+          state.nodesVisible = true;
+          for (let i = 0; i < wf.nodes.length; i++) {
+            const el = nodeEls[i];
+            if (el) el.style.opacity = "1";
+            if (wf.nodes[i].tip && tipEls[i]) {
+              tipEls[i].style.opacity = "1";
+            }
+          }
         }
 
-        if (state.progress > 0.25 && !state.firstPointShown) {
-          if (tooltipOne) tooltipOne.style.opacity = "1";
-          if (nodeOne) nodeOne.style.opacity = "1";
-          state.firstPointShown = true;
+        // Progressive node reveal
+        const revealAt = [0.05, 0.25, 0.40, 0.55, 0.70, 0.85, 0.95];
+        for (let i = 0; i < wf.nodes.length; i++) {
+          if (state.progress >= revealAt[i]) {
+            if (nodeEls[i]) nodeEls[i].style.opacity = "1";
+            if (wf.nodes[i].tip && tipEls[i]) {
+              tipEls[i].style.opacity = "1";
+            }
+          }
         }
 
-        if (state.progress >= 1 && !state.secondPointShown) {
-          if (tooltipTwo) tooltipTwo.style.opacity = "1";
-          if (nodeTwo) nodeTwo.style.opacity = "1";
-          state.secondPointShown = true;
+        // Draw curves progressively
+        const pathsPerStage = Math.ceil(wf.paths.length / 3);
+        for (let p = 0; p < wf.paths.length; p++) {
+          const pathStart = p / wf.paths.length;
+          const pathEnd = (p + 1) / wf.paths.length;
+          const pathProgress = Math.max(0, Math.min(1, (state.progress - pathStart) / (pathEnd - pathStart)));
+
+          if (pathProgress > 0) {
+            const pathDef = wf.paths[p];
+            drawFlowCurve(
+              wf.nodes[pathDef.from],
+              wf.nodes[pathDef.to],
+              width, height,
+              wf.color,
+              0.8,
+              pathProgress,
+            );
+          }
         }
 
-        drawCurve(workflow, state.progress, 0.9);
       } else if (state.phase === "hold") {
         state.holdTimer += elapsed;
-        drawCurve(workflow, 1, 0.9);
+
+        // Draw all curves fully
+        for (const pathDef of wf.paths) {
+          drawFlowCurve(
+            wf.nodes[pathDef.from],
+            wf.nodes[pathDef.to],
+            width, height,
+            wf.color,
+            0.8,
+            1,
+          );
+        }
 
         if (state.holdTimer >= HOLD_DUR) {
           state.phase = "fade";
           state.holdTimer = 0;
         }
+
       } else if (state.phase === "fade") {
         state.holdTimer += elapsed;
         const alpha = Math.max(0, 1 - state.holdTimer / FADE_DUR);
 
-        drawCurve(workflow, 1, 0.9 * alpha);
+        // Fade curves
+        for (const pathDef of wf.paths) {
+          drawFlowCurve(
+            wf.nodes[pathDef.from],
+            wf.nodes[pathDef.to],
+            width, height,
+            wf.color,
+            0.8 * alpha,
+            1,
+          );
+        }
 
-        if (tooltipOne) tooltipOne.style.opacity = String(alpha);
-        if (tooltipTwo) tooltipTwo.style.opacity = String(alpha);
-        if (nodeOne) nodeOne.style.opacity = String(alpha);
-        if (nodeTwo) nodeTwo.style.opacity = String(alpha);
+        // Fade nodes and tips
+        for (let i = 0; i < NODE_POOL_SIZE; i++) {
+          if (nodeEls[i]) nodeEls[i].style.opacity = String(alpha);
+          if (tipEls[i]) tipEls[i].style.opacity = String(alpha);
+        }
 
         if (state.holdTimer >= FADE_DUR) {
           state.phase = "pause";
           state.holdTimer = 0;
         }
+
       } else if (state.phase === "pause") {
         state.holdTimer += elapsed;
 
         if (state.holdTimer >= PAUSE_DUR) {
-          state.currentWorkflow = (state.currentWorkflow + 1) % workflowDefs.length;
-          state.phase = "draw";
-          state.progress = 0;
-          state.holdTimer = 0;
-          state.firstPointShown = false;
-          state.secondPointShown = false;
-          setWorkflow(state.currentWorkflow);
+          state.wfIdx = (state.wfIdx + 1) % workflowDefs.length;
+          setWorkflow(state.wfIdx);
         }
       }
 
-      state.animationId = requestAnimationFrame(tick);
+      state.animId = requestAnimationFrame(tick);
     }
 
     setWorkflow(0);
-    state.animationId = requestAnimationFrame(tick);
+    state.animId = requestAnimationFrame(tick);
 
-    return () => cancelAnimationFrame(state.animationId);
+    return () => cancelAnimationFrame(state.animId);
   }, []);
 
   return (
@@ -313,38 +518,40 @@ export function BackgroundWorkflows() {
       >
         <canvas
           ref={canvasRef}
-          className="absolute inset-0 h-full w-full opacity-90"
+          className="absolute inset-0 h-full w-full"
         />
 
-        <div
-          id="bg-t1"
-          className="absolute max-w-[120px] rounded-[8px] border border-black/10 bg-white/90 px-[9px] py-[5px] text-center text-[10px] leading-[1.4] text-[#222] opacity-0 transition-opacity duration-500 backdrop-blur-[2px]"
-        />
-        <div
-          id="bg-t2"
-          className="absolute max-w-[120px] rounded-[8px] border border-black/10 bg-white/90 px-[9px] py-[5px] text-center text-[10px] leading-[1.4] text-[#222] opacity-0 transition-opacity duration-500 backdrop-blur-[2px]"
-        />
+        {Array.from({ length: NODE_POOL_SIZE }, (_, i) => (
+          <div
+            key={`node-${i}`}
+            id={`bw-n${i}`}
+            className="absolute flex flex-col items-center transition-opacity duration-300"
+            style={{ opacity: 0 }}
+          >
+            <div
+              className="bw-icon flex items-center justify-center rounded-full border-2 border-white bg-white shadow-lg"
+              style={{ width: 44, height: 44 }}
+            >
+              <span
+                className="bw-icon-inner material-symbols-outlined"
+                style={{ fontSize: 22, lineHeight: 1 }}
+              />
+            </div>
+            <span
+              className="bw-label mt-1.5 whitespace-nowrap text-center text-[10px] font-semibold text-[#555]"
+              style={{ maxWidth: 100 }}
+            />
+          </div>
+        ))}
 
-        <div
-          id="bg-n1"
-          className="absolute flex flex-col items-center gap-1 opacity-0 transition-opacity duration-500"
-        >
+        {Array.from({ length: NODE_POOL_SIZE }, (_, i) => (
           <div
-            id="bg-i1"
-            className="h-[34px] w-[34px] overflow-hidden rounded-full border border-black/10 bg-white"
+            key={`tip-${i}`}
+            id={`bw-t${i}`}
+            className="bw-tip absolute rounded-lg border border-black/5 bg-white/95 px-3 py-1.5 text-center text-[11px] font-medium text-[#333] opacity-0 shadow-lg transition-opacity duration-300 backdrop-blur-sm"
+            style={{ display: "none", pointerEvents: "none" }}
           />
-          <div id="bg-l1" className="text-[9px] text-[#555]" />
-        </div>
-        <div
-          id="bg-n2"
-          className="absolute flex flex-col items-center gap-1 opacity-0 transition-opacity duration-500"
-        >
-          <div
-            id="bg-i2"
-            className="h-[34px] w-[34px] overflow-hidden rounded-full border border-black/10 bg-white"
-          />
-          <div id="bg-l2" className="text-[9px] text-[#555]" />
-        </div>
+        ))}
       </div>
     </div>
   );
