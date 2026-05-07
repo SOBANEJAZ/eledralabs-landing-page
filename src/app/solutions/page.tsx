@@ -4,15 +4,10 @@ import Link from "next/link";
 
 export default function SolutionsPage() {
   return (
-    <main className="max-w-[1200px] mx-auto border-x-[0.5px] border-outline-variant min-h-screen flex flex-col pt-32">
+    <main className="max-w-[1200px] mx-auto min-h-screen flex flex-col pt-32 relative isolate overflow-hidden">
       {/* Hero Section */}
       <section className="border-b-[0.5px] border-outline-variant pt-24 pb-32 px-8 relative overflow-hidden flex flex-col items-center justify-center text-center">
-        {/* Decorative Canvas Marks */}
-        <div className="absolute top-8 left-8 w-2 h-2 rounded-full border border-outline-variant" />
-        <div className="absolute bottom-8 right-8 w-2 h-2 rounded-full border border-outline-variant" />
-        <div className="absolute top-0 bottom-0 left-1/2 w-[0.5px] bg-outline-variant/30 -z-10" />
-
-        <ScrollReveal>
+        <ScrollReveal className="relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border-[0.5px] border-outline-variant bg-surface-container-low mb-8">
             <span className="w-2 h-2 rounded-full bg-secondary pulse-dot" />
             <span className="font-label-sm text-label-sm uppercase text-on-surface-variant">
@@ -21,14 +16,14 @@ export default function SolutionsPage() {
           </div>
         </ScrollReveal>
 
-        <ScrollReveal delay={100}>
+        <ScrollReveal delay={100} className="relative z-10">
           <h1 className="font-h1 text-primary max-w-4xl mb-6 tracking-tight">
             Engineered for scale. <br />{" "}
             <span className="text-outline">Designed for clarity.</span>
           </h1>
         </ScrollReveal>
 
-        <ScrollReveal delay={200}>
+        <ScrollReveal delay={200} className="relative z-10">
           <p className="font-body-lg text-on-surface-variant max-w-2xl">
             We build precision-engineered Web and AI workflows that reduce
             operational drag, optimize aesthetics, and automate your most critical
@@ -40,7 +35,7 @@ export default function SolutionsPage() {
       {/* Section 1: Web Solutions */}
       <section className="border-b-[0.5px] border-outline-variant flex flex-col lg:flex-row relative">
         {/* Section Header (Left Col) */}
-        <div className="lg:w-1/3 p-8 lg:border-r-[0.5px] border-outline-variant bg-surface-container-lowest border-b-[0.5px] lg:border-b-0 flex flex-col justify-between">
+        <div className="lg:w-1/3 p-8 lg:border-r-[0.5px] border-outline-variant bg-surface-container-lowest border-b-[0.5px] lg:border-b-0 flex flex-col justify-between relative z-10">
           <ScrollReveal>
             <div>
               <div className="flex items-center gap-2 mb-6">
@@ -63,10 +58,6 @@ export default function SolutionsPage() {
 
           <ScrollReveal delay={200}>
             <div className="hidden lg:flex items-center justify-center h-32 w-full border-[0.5px] border-outline-variant rounded-lg bg-surface-container-low mt-12 relative overflow-hidden group cursor-pointer hover:border-secondary/30 transition-colors">
-              <div
-                className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.03)_1px,transparent_1px)]"
-                style={{ backgroundSize: "8px 8px" }}
-              />
               <MaterialIcon
                 name="view_quilt"
                 className="text-outline-variant text-4xl group-hover:text-secondary transition-colors group-hover:scale-110 transition-transform duration-300"
@@ -76,11 +67,7 @@ export default function SolutionsPage() {
         </div>
 
         {/* Bento Grid Content (Right Col) */}
-        <div className="lg:w-2/3 p-8 bg-surface-container-low grid grid-cols-1 md:grid-cols-2 gap-6 relative">
-          <div
-            className="absolute inset-0 bg-[linear-gradient(to_right,rgba(196,199,199,0.2)_1px,transparent_1px),linear-gradient(to_bottom,rgba(196,199,199,0.2)_1px,transparent_1px)]"
-            style={{ backgroundSize: "64px 64px" }}
-          />
+        <div className="lg:w-2/3 p-8 bg-surface-container-low grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
 
           {/* Card 1 (Spans full width) */}
           <ScrollReveal>
@@ -154,7 +141,7 @@ export default function SolutionsPage() {
       {/* Section 2: AI & Automation */}
       <section className="flex flex-col lg:flex-row relative">
         {/* Section Header (Left Col) */}
-        <div className="lg:w-1/3 p-8 lg:border-r-[0.5px] border-outline-variant bg-surface-container-low border-b-[0.5px] lg:border-b-0 flex flex-col justify-between">
+        <div className="lg:w-1/3 p-8 lg:border-r-[0.5px] border-outline-variant bg-surface-container-low border-b-[0.5px] lg:border-b-0 flex flex-col justify-between relative z-10">
           <ScrollReveal>
             <div>
               <div className="flex items-center gap-2 mb-6">
@@ -177,7 +164,7 @@ export default function SolutionsPage() {
         </div>
 
         {/* Bento Grid Content (Right Col) */}
-        <div className="lg:w-2/3 p-8 bg-background grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="lg:w-2/3 p-8 bg-background grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
           {/* Card 1: AI Voice Agents (Spans full) */}
           <ScrollReveal>
             <div className="card card-interactive md:col-span-2 border-[0.5px] border-outline-variant rounded-xl p-1 bg-surface-container-lowest shadow-sm flex flex-col md:flex-row overflow-hidden">

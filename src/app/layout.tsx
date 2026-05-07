@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { BackgroundWorkflows } from "@/components/ui/background-workflows";
+import { VerticalLines } from "@/components/ui/vertical-lines";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,17 +32,18 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className="bg-[#EEECE8] text-on-background min-h-screen flex flex-col font-body-md selection:bg-primary-container selection:text-on-primary-container antialiased"
+        className="relative bg-[#EEECE8] text-on-background min-h-screen font-body-md selection:bg-primary-container selection:text-on-primary-container antialiased"
       >
-        {/* Global 12-column grid background */}
-        <div className="fixed inset-0 pointer-events-none z-0 grid grid-cols-12 gap-6 px-6 md:px-12 max-w-7xl mx-auto w-full opacity-[0.03]">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="col-span-1 border-r border-[#111]" />
-          ))}
+        <BackgroundWorkflows />
+        <VerticalLines
+          className="fixed z-[1]"
+          innerClassName="mx-auto h-full w-full max-w-7xl px-6 md:px-12"
+        />
+        <div className="relative z-10 flex min-h-screen flex-col">
+          <Navbar />
+          {children}
+          <Footer />
         </div>
-        <Navbar />
-        {children}
-        <Footer />
       </body>
     </html>
   );
